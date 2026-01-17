@@ -1,24 +1,17 @@
 import win32gui as w32
 import ctypes
 from PIL import ImageGrab
-import time
 import numpy as np
 import os
-import win32api
-import win32con
-
+import pydirectinput as pydin
 
 try:
     ctypes.windll.shcore.SetProcessDpiAwareness(1)
 except:
     ctypes.windll.user32.SetProcessDPIAware()
 
-def press_jump(window_name):
-    # Sends a "Spacebar" key down and key up signal
-    hwnd = w32.FindWindow(None, window_name)
-    win32api.PostMessage(hwnd, win32con.WM_KEYDOWN, win32con.VK_SPACE, 0)
-    time.sleep(0.05)
-    win32api.PostMessage(hwnd, win32con.WM_KEYUP, win32con.VK_SPACE, 0)
+def press_jump():
+    pydin.press("space")
 
 def get_window_pixels(window_name):
     hwnd = w32.FindWindow(None, window_name)
@@ -56,4 +49,3 @@ def get_and_reset_reward(file_path):
             # Game is currently writing to the file, skip this frame
             return 0
     return reward
-
