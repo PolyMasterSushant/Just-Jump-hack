@@ -31,7 +31,7 @@ def get_window_pixels(window_name):
 
     return observation
 
-def get_and_reset_reward(file_path):
+def get_score(file_path):
     reward = 0
     if os.path.exists(file_path):
         try:
@@ -41,11 +41,21 @@ def get_and_reset_reward(file_path):
                 if content:
                     reward = float(content)
             
-            # 2. Reset the file to 0 if we found a score
-            if reward > 0:
-                with open(file_path, "w") as f:
-                    f.write("0")
         except PermissionError:
             # Game is currently writing to the file, skip this frame
             return 0
     return reward
+
+def get_reward(prev_score):
+    x = get_score("assets/high.txt")
+
+    if prev_score == x and x != 0:
+        with open("assets/high.txt", "w") as f:
+            f.write("0")
+            return -1
+    elif prev_score == None:
+        return 0
+    elif x > prev_score:
+        return 1
+    else:
+        return 0
